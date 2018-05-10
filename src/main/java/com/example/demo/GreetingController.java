@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -23,9 +22,14 @@ public class GreetingController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Map<String, String>> restTemplate() throws Exception {
+    public List<JSONObject> restTemplate(HttpServletRequest request) throws Exception {
         String baseUrl = "openapi.seoul.go.kr";
         String svcKey = "72694d7657737769323442486a694d";
+        String name = request.getParameter("name");
+        String category = request.getParameter("category");
+        String place = request.getParameter("place");
+
+        System.out.println(name+category+place);
 
         RestTemplate restTpl = new RestTemplate();
         URI uri = UriComponentsBuilder.newInstance()
@@ -33,7 +37,10 @@ public class GreetingController {
                 .host(baseUrl)
                 .port("8088")
                 .path(svcKey)
-                .path("/json/SearchLostArticleService/1/8/핸드폰/b1/")
+                .path("/json/SearchLostArticleService/1/8/핸드폰/b1")
+//                .path(category)
+//                .path(place)
+//                .path(name)
                 .build()
                 .encode()
                 .toUri();
@@ -53,19 +60,19 @@ public class GreetingController {
         JSONObject body = (JSONObject) json.get("SearchLostArticleService");
 
         List<JSONObject> rows = (List<JSONObject>) body.get("row");
-        List<Map<String, String>> tempList =  new ArrayList<Map<String, String>>();
+        List<JSONObject> results = new ArrayList<JSONObject>();
+        JSONObject losts = new JSONObject();
 
         for (int i = 0; i < rows.size(); i++) {
             String temp = getImages(rows.get(i).get("ID"));
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("IMAGE_URL",temp);
-            tempList.add(map);
+            rows.get(i).put("IMAGE_URL", temp);
+            results.add(rows.get(i));
         }
 
-        return tempList;
+        return results;
     }
 
-    public String getImages(Object number) throws Exception{
+    public String getImages(Object number) throws Exception {
         String baseUrl = "openapi.seoul.go.kr";
         String svcKey = "72694d7657737769323442486a694d";
 
@@ -98,3 +105,8 @@ public class GreetingController {
     }
 
 }
+
+/*
+* 해야할일
+* gson 사용하기
+* */
