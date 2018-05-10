@@ -108,5 +108,7 @@ public class GreetingController {
 
 /*
 * 해야할일
+* 배포 하기
 * gson 사용하기
+* swagger 연결하기
 * */
