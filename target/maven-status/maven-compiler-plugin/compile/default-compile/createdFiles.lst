@@ -1,5 +1,7 @@
 com/example/demo/DemoApplication.class
 com/example/demo/SwaggerConfig.class
 com/example/demo/GreetingController.class
+com/example/demo/MyConfiguration$1.class
 com/example/demo/Greeting.class
+com/example/demo/MyConfiguration.class
 com/example/demo/homeController.class
