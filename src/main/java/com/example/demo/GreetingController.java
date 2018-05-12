@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 @RestController
+@CrossOrigin(origins = "http://13.209.42.155:8080/swagger-ui.html")
 @RequestMapping("/Greeting")
 
 @Api(value="onlinestore", description="물건 찾기 API")
